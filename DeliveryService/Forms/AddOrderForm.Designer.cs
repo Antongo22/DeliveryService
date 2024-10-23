@@ -31,8 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AddOrderForm));
             WeightTextBox = new TextBox();
             labelWeight = new Label();
-            label2 = new Label();
-            label3 = new Label();
+            Citieslabel = new Label();
+            DateTimelabel = new Label();
             DatedateTimePicker = new DateTimePicker();
             CitiesComboBox = new ComboBox();
             SaveButton = new Button();
@@ -40,7 +40,7 @@
             // 
             // WeightTextBox
             // 
-            WeightTextBox.Location = new Point(69, 23);
+            WeightTextBox.Location = new Point(164, 23);
             WeightTextBox.Name = "WeightTextBox";
             WeightTextBox.Size = new Size(170, 23);
             WeightTextBox.TabIndex = 0;
@@ -55,27 +55,27 @@
             labelWeight.TabIndex = 1;
             labelWeight.Text = "Вес";
             // 
-            // label2
+            // Citieslabel
             // 
-            label2.AutoSize = true;
-            label2.Location = new Point(12, 76);
-            label2.Name = "label2";
-            label2.Size = new Size(38, 15);
-            label2.TabIndex = 2;
-            label2.Text = "label2";
+            Citieslabel.AutoSize = true;
+            Citieslabel.Location = new Point(12, 76);
+            Citieslabel.Name = "Citieslabel";
+            Citieslabel.Size = new Size(40, 15);
+            Citieslabel.TabIndex = 2;
+            Citieslabel.Text = "Город";
             // 
-            // label3
+            // DateTimelabel
             // 
-            label3.AutoSize = true;
-            label3.Location = new Point(12, 123);
-            label3.Name = "label3";
-            label3.Size = new Size(38, 15);
-            label3.TabIndex = 3;
-            label3.Text = "label3";
+            DateTimelabel.AutoSize = true;
+            DateTimelabel.Location = new Point(12, 123);
+            DateTimelabel.Name = "DateTimelabel";
+            DateTimelabel.Size = new Size(131, 15);
+            DateTimelabel.TabIndex = 3;
+            DateTimelabel.Text = "Дата и время доставки";
             // 
             // DatedateTimePicker
             // 
-            DatedateTimePicker.Location = new Point(69, 117);
+            DatedateTimePicker.Location = new Point(164, 117);
             DatedateTimePicker.Name = "DatedateTimePicker";
             DatedateTimePicker.Size = new Size(170, 23);
             DatedateTimePicker.TabIndex = 4;
@@ -84,14 +84,14 @@
             // 
             CitiesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             CitiesComboBox.FormattingEnabled = true;
-            CitiesComboBox.Location = new Point(69, 73);
+            CitiesComboBox.Location = new Point(164, 73);
             CitiesComboBox.Name = "CitiesComboBox";
             CitiesComboBox.Size = new Size(170, 23);
             CitiesComboBox.TabIndex = 5;
             // 
             // SaveButton
             // 
-            SaveButton.Location = new Point(164, 210);
+            SaveButton.Location = new Point(259, 160);
             SaveButton.Name = "SaveButton";
             SaveButton.Size = new Size(75, 23);
             SaveButton.TabIndex = 6;
@@ -103,12 +103,12 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(254, 245);
+            ClientSize = new Size(346, 191);
             Controls.Add(SaveButton);
             Controls.Add(CitiesComboBox);
             Controls.Add(DatedateTimePicker);
-            Controls.Add(label3);
-            Controls.Add(label2);
+            Controls.Add(DateTimelabel);
+            Controls.Add(Citieslabel);
             Controls.Add(labelWeight);
             Controls.Add(WeightTextBox);
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -124,8 +124,8 @@
 
         private TextBox WeightTextBox;
         private Label labelWeight;
-        private Label label2;
-        private Label label3;
+        private Label Citieslabel;
+        private Label DateTimelabel;
         private DateTimePicker DatedateTimePicker;
         private ComboBox CitiesComboBox;
         private Button SaveButton;

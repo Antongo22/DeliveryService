@@ -13,10 +13,11 @@ namespace DeliveryService.Forms
 {
     public partial class AddOrderForm : Form
     {
-        int weight;
+        DatabaseManager databaseManager;
 
         public AddOrderForm()
         {
+            databaseManager = DatabaseManager.GetInstance();
             InitializeComponent();
         }
 
@@ -45,24 +46,34 @@ namespace DeliveryService.Forms
             }
 
             DatedateTimePicker.Format = DateTimePickerFormat.Custom;
-            DatedateTimePicker.CustomFormat = "dd.MM.yyyy HH:mm";
+            DatedateTimePicker.CustomFormat = "dd.MM.yyyy HH:mm:ss";
+            DatedateTimePicker.MinDate = DateTime.Now;
+            DatedateTimePicker.MaxDate = DateTime.Now.AddMonths(1);
         }
 
         private void SaveButton_Click(object sender, EventArgs e)
         {
+            if ( !(double.TryParse(WeightTextBox.Text.Replace(".", ","), out double weighttb)) || weighttb < 0 )
+            {
+                MessageBox.Show("Введите корректный вес!");
+                return;
+            }
 
+            DateTime selectedDate = DatedateTimePicker.Value;
+
+            if (selectedDate < DateTime.Now)
+            {
+                MessageBox.Show("Выбранная дата и время не могут быть из прошлого!");
+                return;
+            }
+
+
+            databaseManager.AddOrder(weighttb, CitiesComboBox.Text, selectedDate);
         }
 
         private void WeightTextBox_TextChanged(object sender, EventArgs e)
-        {
-            if (int.TryParse(WeightTextBox.Text, out int weighttb) && weighttb >= 0)
-            {
-                this.weight = weighttb;
-            }
+        {   
 
-            WeightTextBox.Text = weight.ToString();
-            WeightTextBox.Select(WeightTextBox.Text.Length, 0);
-            WeightTextBox.Focus();
         }
     }
 }

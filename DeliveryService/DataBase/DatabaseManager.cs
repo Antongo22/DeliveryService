@@ -89,7 +89,7 @@ namespace DeliveryService.DataBase
             }
         }
 
-        public void AddOrder(decimal orderWeight, string cityDistrict, DateTime deliveryDateTime)
+        public void AddOrder(double orderWeight, string cityDistrict, DateTime deliveryDateTime)
         {
             try
             {
@@ -176,7 +176,7 @@ namespace DeliveryService.DataBase
             }
             catch (Exception ex)
             {
-                File.AppendAllText("DataBase/errorslog.log", DateTime.Now + ": " + logType + ": " + message + "\n");
+                File.AppendAllText("DataBase/errorslog.log", DateTime.Now + ":" + logType + ":" + message + "\n");
             }
         }
 
