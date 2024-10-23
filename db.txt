@@ -1,0 +1,5 @@
+Таблица - Orders
+Id_Order - PK
+Location_Id - FK
+Weight_Order - decimel(10, 4), not null
+DateTime_Order

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Cities>
+    <City>Москва</City>
+    <City>Санкт-Петербург</City>
+    <City>Новосибирск</City>
+    <City>Екатеринбург</City>
+    <City>Нижний Новгород</City>
+    <City>Казань</City>
+    <City>Челябинск</City>
+    <City>Омск</City>
+    <City>Самара</City>
+    <City>Ростов-на-Дону</City>
+    <City>Уфа</City>
+    <City>Красноярск</City>
+    <City>Воронеж</City>
+    <City>Пермь</City>
+    <City>Тула</City>
+    <City>Сaratov</City>
+    <City>Ижевск</City>
+    <City>Кострома</City>
+    <City>Томск</City>
+    <City>Ярославль</City>
+</Cities>
