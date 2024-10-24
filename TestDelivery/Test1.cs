@@ -43,6 +43,7 @@ namespace TestDelivery
         public void TestSaveFilteredOrders_ShouldLogMessage_WhenDataIsSaved()
         {
             var dbManager = DatabaseManager.GetInstance();
+
             DataTable testTable = new DataTable();
             testTable.Columns.Add("OrderID", typeof(int));
             testTable.Columns.Add("CityDistrict", typeof(string));
@@ -54,7 +55,17 @@ namespace TestDelivery
 
             dbManager.SaveFilteredOrders(testTable);
 
-            Assert.IsTrue(true);
+            DataTable logsTable = dbManager.GetAllLogs();
+
+            Assert.IsNotNull(logsTable, "Logs should not be null.");
+            Assert.IsTrue(logsTable.Rows.Count > 0, "Logs should contain at least one entry.");
+
+            DataRow lastLog = logsTable.Rows[logsTable.Rows.Count - 1];
+            string logMessage = lastLog["LogMessage"].ToString();
+
+            Assert.IsTrue(logMessage.Contains("Filtered orders successfully saved to the database."),
+                          "The log message should indicate that the filtered orders were saved.");
         }
+
     }
 }
