@@ -89,7 +89,7 @@ namespace DeliveryService.DataBase
             }
         }
 
-        public void AddOrder(double orderWeight, string cityDistrict, DateTime deliveryDateTime)
+        public bool AddOrder(double orderWeight, string cityDistrict, DateTime deliveryDateTime)
         {
             try
             {
@@ -110,10 +110,15 @@ namespace DeliveryService.DataBase
                         command.ExecuteNonQuery();
                     }
                 }
+
+                AddLog($"New order created", "create");
+
+                return true;
             }
             catch (Exception ex)
             {
                 LogError("Error adding order: " + ex.Message);
+                return false;
             }
         }
 
@@ -152,6 +157,64 @@ namespace DeliveryService.DataBase
             return filteredOrders;
         }
 
+        public void SaveFilteredOrders(DataTable filteredOrders)
+        {
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    foreach (DataRow row in filteredOrders.Rows)
+                    {
+                        string query = @"
+                        INSERT INTO FilteredOrders (OrderID, CityDistrict, FilterDateTime)
+                        VALUES (@OrderID, @CityDistrict, @FilterDateTime);";
+
+                        using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                        {
+                            command.Parameters.AddWithValue("@OrderID", row["OrderID"]);
+                            command.Parameters.AddWithValue("@CityDistrict", row["CityDistrict"]);
+                            command.Parameters.AddWithValue("@FilterDateTime", DateTime.Now);
+
+                            command.ExecuteNonQuery();
+                        }
+                    }
+
+                    AddLog("Filtered orders successfully saved to the database.", "save");
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("Error saving filtered orders: " + ex.Message);
+            }
+        }
+
+        public void ClearFilteredOrders()
+        {
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    string query = "DELETE FROM FilteredOrders;";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    AddLog("Filtered orders table cleared.", "clear");
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError("Error clearing filtered orders: " + ex.Message);
+            }
+        }
+
+        #region logs
         public void AddLog(string message, string logType)
         {
             try
@@ -184,36 +247,102 @@ namespace DeliveryService.DataBase
         {
             AddLog(errorMessage, "Error");
         }
+        #endregion
 
-        public void SaveFilteredOrders(DataTable filteredOrders)
+        #region retrieve
+        public DataTable GetAllOrders()
         {
+            DataTable ordersTable = new DataTable();
+
             try
             {
                 using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
                 {
                     connection.Open();
 
-                    foreach (DataRow row in filteredOrders.Rows)
+                    string query = "SELECT * FROM Orders;";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
                     {
-                        string query = @"
-                        INSERT INTO FilteredOrders (OrderID, CityDistrict, FilterDateTime)
-                        VALUES (@OrderID, @CityDistrict, @FilterDateTime);";
-
-                        using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(command))
                         {
-                            command.Parameters.AddWithValue("@OrderID", row["OrderID"]);
-                            command.Parameters.AddWithValue("@CityDistrict", row["CityDistrict"]);
-                            command.Parameters.AddWithValue("@FilterDateTime", DateTime.Now);
-
-                            command.ExecuteNonQuery();
+                            adapter.Fill(ordersTable);
                         }
                     }
                 }
+
+                AddLog("Retrieved all orders from Orders table.", "retrieve");
             }
             catch (Exception ex)
             {
-                LogError("Error saving filtered orders: " + ex.Message);
+                LogError("Error retrieving all orders: " + ex.Message);
             }
+
+            return ordersTable;
         }
+
+        public DataTable GetAllFilteredOrders()
+        {
+            DataTable filteredOrdersTable = new DataTable();
+
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    string query = "SELECT * FROM FilteredOrders;";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    {
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(command))
+                        {
+                            adapter.Fill(filteredOrdersTable);
+                        }
+                    }
+                }
+
+                AddLog("Retrieved all orders from FilteredOrders table.", "retrieve");
+            }
+            catch (Exception ex)
+            {
+                LogError("Error retrieving all filtered orders: " + ex.Message);
+            }
+
+            return filteredOrdersTable;
+        }
+
+        public DataTable GetAllLogs()
+        {
+            DataTable logsTable = new DataTable();
+
+            try
+            {
+                using (SQLiteConnection connection = new SQLiteConnection(_connectionString))
+                {
+                    connection.Open();
+
+                    string query = "SELECT * FROM DeliveryLogs;";
+
+                    using (SQLiteCommand command = new SQLiteCommand(query, connection))
+                    {
+                        using (SQLiteDataAdapter adapter = new SQLiteDataAdapter(command))
+                        {
+                            adapter.Fill(logsTable);
+                        }
+                    }
+                }
+
+                AddLog("Retrieved all logs from DeliveryLogs table.", "retrieve");
+            }
+            catch (Exception ex)
+            {
+                LogError("Error retrieving all logs: " + ex.Message);
+            }
+
+            return logsTable;
+        }
+
+        #endregion
     }
 }

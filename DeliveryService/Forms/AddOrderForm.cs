@@ -21,27 +21,11 @@ namespace DeliveryService.Forms
             InitializeComponent();
         }
 
-        bool SetCityDistrict()
-        {
-            List<string> Cities = GetCities.LoadCitiesFromXml("DataBase\\CityDistrict.xml");
-
-            if (Cities == null || Cities.Count == 0)
-            {
-                return false;
-            }
-
-            CitiesComboBox.Items.AddRange(Cities.ToArray());
-            CitiesComboBox.SelectedIndex = 0;
-
-            return true;
-        }
-
 
         private void AddOrderForm_Load(object sender, EventArgs e)
         {
-            if (!SetCityDistrict())
+            if (!GetCities.SetCityDistrict(CitiesComboBox))
             {
-                MessageBox.Show("Произошла ошибка при загрузке городов");
                 Close();
             }
 
@@ -58,6 +42,13 @@ namespace DeliveryService.Forms
                 MessageBox.Show("Введите корректный вес!");
                 return;
             }
+            
+
+            if (!System.Text.RegularExpressions.Regex.IsMatch(WeightTextBox.Text.Replace(".", ","), @"^\d{1,6}(,\d{1,2})?$"))
+            {
+                MessageBox.Show("Вес должен содержать до 6 цифр перед запятой и до 2 знаков после запятой!");
+                return;
+            }
 
             DateTime selectedDate = DatedateTimePicker.Value;
 
@@ -68,12 +59,10 @@ namespace DeliveryService.Forms
             }
 
 
-            databaseManager.AddOrder(weighttb, CitiesComboBox.Text, selectedDate);
-        }
+            if (databaseManager.AddOrder(weighttb, CitiesComboBox.Text, selectedDate)) MessageBox.Show("Заказ успешно добавлен!");
+            else MessageBox.Show("Ошибка при добавлении заказа! Попробуйте позже.");
 
-        private void WeightTextBox_TextChanged(object sender, EventArgs e)
-        {   
-
+            Close();
         }
     }
 }

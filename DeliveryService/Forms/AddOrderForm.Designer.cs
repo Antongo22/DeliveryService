@@ -44,7 +44,6 @@
             WeightTextBox.Name = "WeightTextBox";
             WeightTextBox.Size = new Size(170, 23);
             WeightTextBox.TabIndex = 0;
-            WeightTextBox.TextChanged += WeightTextBox_TextChanged;
             // 
             // labelWeight
             // 

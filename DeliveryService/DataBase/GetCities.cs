@@ -6,7 +6,7 @@ namespace DeliveryService.DataBase
 {
     internal static class GetCities
     {
-        public static List<string> LoadCitiesFromXml(string filePath)
+        static List<string> LoadCitiesFromXml(string filePath, DatabaseManager databaseManager)
         {
             List<string> cities = new List<string>();
 
@@ -21,11 +21,30 @@ namespace DeliveryService.DataBase
             }
             catch (Exception ex)
             {
-                DatabaseManager databaseManager = DatabaseManager.GetInstance();
                 databaseManager.LogError("Ошибка при загрузке города из XML: " + ex.Message);
             }
 
             return cities;
+        }
+
+
+        public static bool SetCityDistrict(ComboBox CitiesComboBox)
+        {
+            DatabaseManager databaseManager = DatabaseManager.GetInstance();
+
+            List<string> Cities = LoadCitiesFromXml("DataBase\\CityDistrict.xml", databaseManager);
+
+            if (Cities == null || Cities.Count == 0)
+            {
+                databaseManager.LogError("Произошла ошибка при загрузке городов!");
+                MessageBox.Show("Произошла ошибка при загрузке городов!");
+                return false;
+            }
+
+            CitiesComboBox.Items.AddRange(Cities.ToArray());
+            CitiesComboBox.SelectedIndex = 0;
+
+            return true;
         }
     }
 }
