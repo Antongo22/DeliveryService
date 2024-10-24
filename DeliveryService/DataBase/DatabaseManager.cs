@@ -8,6 +8,7 @@ namespace DeliveryService.DataBase
     public class DatabaseManager
     {
         private readonly string _connectionString = $"Data Source={AppDomain.CurrentDomain.BaseDirectory}/DataBase/deliveryDB.db;";
+        private readonly string _errorlog = $"{AppDomain.CurrentDomain.BaseDirectory}/DataBase/errorslog.txt";
 
         private static DatabaseManager _instance;
 
@@ -15,6 +16,8 @@ namespace DeliveryService.DataBase
 
         private DatabaseManager()
         {
+            if(!File.Exists(_errorlog))
+                File.Create(_errorlog).Close();
             InitializeDatabase();
         }
 
@@ -239,7 +242,7 @@ namespace DeliveryService.DataBase
             }
             catch (Exception ex)
             {
-                File.AppendAllText("DataBase/errorslog.log", DateTime.Now + ":" + logType + ":" + message + "\n");
+                File.AppendAllText(_errorlog, DateTime.Now + ":" + logType + ":" + message + "\n");
             }
         }
 
